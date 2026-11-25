@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>TANKI グローバルランキング / Global ranking</title>
+<style>
+  :root { --bg: #f6f4ef; --fg: #1d1b18; --muted: #6b665d; --line: #d9d3c7; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #1b1a18; --fg: #ece8e1; --muted: #a39d92; --line: #3a3732; } }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 1.35rem; margin: 0 0 4px; }
+  #info { color: var(--muted); margin: 0 0 16px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px; text-align: left; overflow-wrap: anywhere; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag { color: var(--muted); font-size: .85em; }
+  footer { color: var(--muted); font-size: .88rem; margin-top: 24px; }
+</style>
+<script src="board.js" defer></script>
+</head>
+<body>
+<main>
+  <h1>TANKI グローバルランキング / Global ranking</h1>
+  <p id="info">読み込み中… / Loading…</p>
+  <table>
+    <thead><tr><th>#</th><th>名前 / Name</th><th>段位 / Tier</th><th class="n">RP</th><th class="n">対局 / Games</th><th>更新 / Updated</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <footer>
+    <p>上位20位に入る記録は、ワールドの作者が確認してから載せます。30日間送信のない記録は一覧から外れます。名前は各プレイヤーが選んだものです。</p>
+    <p>Rows that would enter the top 20 are checked by the world's creator first. Rows with no send for 30 days leave the list. Names are chosen by the players.</p>
+    <p><a href="https://rank.tankivrc.com/privacy">プライバシー / Privacy</a></p>
+  </footer>
+</main>
+</body>
+</html>
