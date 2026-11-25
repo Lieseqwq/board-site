@@ -1,0 +1,46 @@
+# Publishes the ranking board to GitHub Pages (spec 5.8). Started only by the Worker's workflow_dispatch.
+# The board never enters git history: it is fetched at run time and shipped as a 1-day Pages artifact.
+# Repository secrets: EXPORT_URL (https://rank.<domain>/export) and EXPORT_TOKEN (the Worker's EXPORT_TOKEN).
+# Repository settings: Pages source "GitHub Actions".
+name: publish board
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch and check the board
+        env:
+          EXPORT_URL: ${{ secrets.EXPORT_URL }}
+          EXPORT_TOKEN: ${{ secrets.EXPORT_TOKEN }}
+        run: |
+          set -euo pipefail
+          curl -fsS --max-time 30 -H "x-export-token: ${EXPORT_TOKEN}" "${EXPORT_URL}" -o site/board1.txt
+          head -n 1 site/board1.txt | grep -qP '^TRB1\t\d+\t\d+\t\d+\t\d+$'
+          tail -n 1 site/board1.txt | grep -qP '^END\t\d+$'
+          test "$(wc -c < site/board1.txt)" -le 16000
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+          retention-days: 1
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
